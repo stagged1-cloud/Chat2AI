@@ -9,12 +9,19 @@ CoordMode, Mouse, Screen
 ; Track button state: 0 = ready to record, 1 = recording (ready to send)
 global ButtonState := 0
 
-; Create the floating button with proper text rendering
-Gui, +AlwaysOnTop -Caption +ToolWindow +E0x20  ; E0x20 makes it click-through transparent background
-Gui, Color, 4169E1  ; Royal Blue background
-Gui, Font, s16 bold, Arial
-Gui, Add, Text, cWhite gToggleVoice Center w80 h80 +BackgroundTrans, MIC`nCLICK
-Gui, Show, NA, Voice Button
+; Create a round, 3D button with shadow effect
+Gui, +AlwaysOnTop -Caption +ToolWindow +E0x20
+Gui, Margin, 0, 0
+Gui, Color, 4169E1  ; Royal Blue
+
+; Create button text - centered
+Gui, Font, s10 bold, Segoe UI
+Gui, Add, Text, x0 y30 w100 h40 cWhite gToggleVoice Center BackgroundTrans vButtonText, MIC`nCLICK
+
+Gui, Show, w100 h100 NA, Voice Button
+
+; Make the GUI window round (circular)
+WinSet, Region, 0-0 W100 H100 R50-50, Voice Button
 
 ; Initially hide the button
 Gui, Hide
@@ -32,11 +39,11 @@ CheckClaudeWindow:
             WinGetPos, WinX, WinY, WinWidth, WinHeight, A
             
             ; Position button in bottom-right of Claude window with padding
-            ButtonX := WinX + WinWidth - 100
-            ButtonY := WinY + WinHeight - 100
+            ButtonX := WinX + WinWidth - 120
+            ButtonY := WinY + WinHeight - 120
             
             ; Show and position the button
-            Gui, Show, x%ButtonX% y%ButtonY% w90 h90 NA, Voice Button
+            Gui, Show, x%ButtonX% y%ButtonY% w100 h100 NA, Voice Button
         }
         else
         {
@@ -60,43 +67,50 @@ ToggleVoice:
         ButtonState := 1
         
         ; Update button text
-        GuiControl,, Static1, REC`nON
+        GuiControl,, ButtonText, REC`nON
         
-        ; Click in the text field area
+        ; Click in the text field area to focus it
         WinActivate, ahk_exe claude.exe
+        Sleep, 100
         WinGetPos, WinX, WinY, WinWidth, WinHeight, A
+        
+        ; Click in the text input area
         ClickX := WinX + (WinWidth / 2)
-        ClickY := WinY + WinHeight - 100
+        ClickY := WinY + WinHeight - 80
+        Click, %ClickX%, %ClickY%
+        Sleep, 150
+        
+        ; Click again to ensure focus
         Click, %ClickX%, %ClickY%
         Sleep, 200
         
         ; Start Windows Voice Typing
         Send, #{h}
         
-        ; Show tooltip
-        ToolTip, 🎙️ Recording... Click button again to SEND
+        ; Show clean tooltip
+        ToolTip, Recording... Click button again to send
         SetTimer, RemoveToolTip, 3000
     }
     else
     {
         ; Second click: Send the message
         Gui, Color, 00CC00  ; Bright green (sending)
-        GuiControl,, Static1, SEND`nING
-        Sleep, 200
+        GuiControl,, ButtonText, SEND`nING
+        Sleep, 150
         
         ; Send the message
         WinActivate, ahk_exe claude.exe
         Sleep, 100
         Send, {Enter}
         
-        ; Show tooltip
-        ToolTip, ✅ Message sent!
-        SetTimer, RemoveToolTip, 2000
+        ; Show clean tooltip
+        ToolTip, Message sent!
+        SetTimer, RemoveToolTip, 1500
         
         ; Reset to ready state
-        Sleep, 300
+        Sleep, 250
         Gui, Color, 4169E1  ; Back to blue
-        GuiControl,, Static1, MIC`nCLICK
+        GuiControl,, ButtonText, MIC`nCLICK
         ButtonState := 0
     }
 return
