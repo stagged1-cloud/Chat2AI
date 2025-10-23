@@ -31,10 +31,10 @@ Double-click: start_voice_automation.bat
 
 1. Ensure both WhisperWriter and AutoHotkey script are running (check system tray)
 2. Open Claude Desktop
-3. Press **Ctrl+Alt+V** (or your configured hotkey)
+3. Press **Ctrl+Shift+V** (changed from Ctrl+Alt+V to avoid Nvidia conflict)
 4. When you hear the beep, speak your message
 5. WhisperWriter will transcribe and type it into the focused field
-6. Press **Ctrl+Alt+S** to send the message
+6. Press **Ctrl+Shift+S** to send the message
 
 ## Files
 
@@ -48,8 +48,11 @@ Double-click: start_voice_automation.bat
 
 ## Hotkeys
 
-- **Ctrl+Alt+V**: Focus Claude text field and activate voice input
-- **Ctrl+Alt+S**: Send message (press Enter)
-- **Ctrl+Alt+C**: Clear text field
-- **Ctrl+Alt+A**: Launch/Activate Claude Desktop
+**Note:** Changed to Ctrl+Shift combinations to avoid conflicts with Nvidia GeForce Experience
+
+- **Ctrl+Shift+V**: Focus Claude text field and activate voice input
+- **Ctrl+Shift+S**: Send message (press Enter)
+- **Ctrl+Shift+C**: Clear text field
+- **Ctrl+Shift+A**: Launch/Activate Claude Desktop
 - **Ctrl+Shift+Space**: WhisperWriter voice recording (configured in WhisperWriter)
+- **Ctrl+Shift+T**: Test if script is running

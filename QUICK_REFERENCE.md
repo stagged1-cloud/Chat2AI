@@ -5,21 +5,24 @@ Double-click: `start_voice_automation.bat`
 
 ## ⌨️ Hotkeys
 
+**Changed to Ctrl+Shift to avoid Nvidia GeForce conflicts!**
+
 | Hotkey | Action |
 |--------|--------|
-| **Ctrl+Alt+V** | Focus text field + activate voice |
-| **Ctrl+Alt+S** | Send message (Enter) |
-| **Ctrl+Alt+C** | Clear text field |
-| **Ctrl+Alt+A** | Launch/Activate Claude Desktop |
+| **Ctrl+Shift+V** | Focus text field + activate voice |
+| **Ctrl+Shift+S** | Send message (Enter) |
+| **Ctrl+Shift+C** | Clear text field |
+| **Ctrl+Shift+A** | Launch/Activate Claude Desktop |
+| **Ctrl+Shift+T** | Test script is running |
 | **Ctrl+Shift+Space** | WhisperWriter recording |
 
 ## 📋 Typical Workflow
 
-1. Open Claude Desktop (or press Ctrl+Alt+A)
-2. Press **Ctrl+Alt+V** to focus and activate voice
+1. Open Claude Desktop (or press Ctrl+Shift+A)
+2. Press **Ctrl+Shift+V** to focus and activate voice
 3. Speak your message when you hear the beep
 4. Wait for transcription to appear
-5. Press **Ctrl+Alt+S** to send
+5. Press **Ctrl+Shift+S** to send
 
 ## ✅ Check Status
 

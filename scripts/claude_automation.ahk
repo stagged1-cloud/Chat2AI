@@ -6,10 +6,10 @@
 SetTitleMatchMode, 2  ; Partial title matching
 
 ; Show startup message
-TrayTip, Voice Automation, Ctrl+Alt+V ready!, 3, 1
+TrayTip, Voice Automation, Ctrl+Shift+V ready for voice input!, 3, 1
 
-; Global hotkey to activate Claude and start voice input
-^!v::
+; Global hotkey to activate Claude and start voice input (Changed from Ctrl+Alt+V to avoid Nvidia conflict)
+^+v::
     ; Check if Claude is running and activate it
     IfWinExist, ahk_exe claude.exe
     {
@@ -37,24 +37,24 @@ TrayTip, Voice Automation, Ctrl+Alt+V ready!, 3, 1
     }
     else
     {
-        MsgBox, 48, Voice Automation, Claude Desktop is not running.`n`nPress Ctrl+Alt+A to launch it.
+        MsgBox, 48, Voice Automation, Claude Desktop is not running.`n`nPress Ctrl+Shift+A to launch it.
     }
 return
 
-; Hotkey: Ctrl+Alt+S - Send message (press Enter) - Works only in Claude
+; Hotkey: Ctrl+Shift+S - Send message (press Enter) - Works only in Claude
 #IfWinActive ahk_exe claude.exe
-^!s::
+^+s::
     Send, {Enter}
 return
 
-; Hotkey: Ctrl+Alt+C - Clear text field - Works only in Claude
-^!c::
+; Hotkey: Ctrl+Shift+C - Clear text field - Works only in Claude
+^+c::
     ControlSetText, Edit1, , A
 return
 #IfWinActive
 
 ; Global hotkey to launch/activate Claude Desktop
-^!a::
+^+a::
     ; Check if Claude is running
     IfWinExist, ahk_exe claude.exe
     {
@@ -69,9 +69,9 @@ return
     }
 return
 
-; Test hotkey to verify script is running - Press Ctrl+Alt+T
-^!t::
-    MsgBox, 64, Voice Automation Test, Script is running successfully!`n`nHotkeys available:`n• Ctrl+Alt+V - Voice input`n• Ctrl+Alt+A - Open Claude`n• Ctrl+Alt+S - Send message`n• Ctrl+Alt+C - Clear field
+; Test hotkey to verify script is running - Press Ctrl+Shift+T
+^+t::
+    MsgBox, 64, Voice Automation Test, Script is running successfully!`n`nHotkeys available (Ctrl+Shift combinations):`n• Ctrl+Shift+V - Voice input`n• Ctrl+Shift+A - Open Claude`n• Ctrl+Shift+S - Send message`n• Ctrl+Shift+C - Clear field`n`nChanged from Ctrl+Alt to avoid Nvidia conflicts!
 return
 
 ; Helper function to remove tooltip
@@ -81,17 +81,17 @@ RemoveToolTip:
 return
 
 ; Tray menu for easy access
-Menu, Tray, Tip, Claude Voice Automation - Active
+Menu, Tray, Tip, Claude Voice Automation - Active (Ctrl+Shift+V)
 Menu, Tray, NoStandard
-Menu, Tray, Add, Test Voice Input (Ctrl+Alt+V), TestVoice
+Menu, Tray, Add, Test Voice Input (Ctrl+Shift+V), TestVoice
 Menu, Tray, Add
 Menu, Tray, Add, Reload Script, ReloadScript
 Menu, Tray, Add, Edit Script, EditScript
 Menu, Tray, Add, Exit, ExitScript
-Menu, Tray, Default, Test Voice Input (Ctrl+Alt+V)
+Menu, Tray, Default, Test Voice Input (Ctrl+Shift+V)
 
 TestVoice:
-    Send, ^!v
+    Send, ^+v
 return
 
 ReloadScript:
