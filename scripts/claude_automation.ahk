@@ -1,21 +1,21 @@
 ; Claude Desktop Voice Automation Script
-; SIMPLIFIED - Manual click version (most reliable)
+; ULTRA-SIMPLE - Uses Windows Voice Typing (Win+H) instead of WhisperWriter
 
 ; Set up script behavior
 #SingleInstance Force
 SetTitleMatchMode, 2
 
 ; Show startup message
-TrayTip, Voice Automation, Ready! Click text field then use Ctrl+Shift+V, 3, 1
+TrayTip, Voice Automation, Ready! Using Windows Voice Typing, 3, 1
 
-; Ctrl+Shift+V - Start voice input (you click the text field manually first)
+; Ctrl+Shift+V - Start voice input using Windows Voice Typing
 ^+v::
-    ToolTip, Starting voice recording...
+    ToolTip, Starting Windows Voice Typing...
     SetTimer, RemoveToolTip, 2000
     
-    ; Trigger WhisperWriter
+    ; Trigger Windows Voice Typing (Win+H)
     Sleep, 100
-    Send, ^+{Space}
+    Send, #{h}
 return
 
 ; Hotkey: Ctrl+Shift+S - Send message (press Enter) - Works only in Claude
@@ -48,7 +48,7 @@ return
 
 ; Test hotkey to verify script is running - Press Ctrl+Shift+T
 ^+t::
-    MsgBox, 64, Voice Automation, Script is running!`n`nSIMPLE WORKFLOW:`n`n1. Click in Claude's text field (manual)`n2. Press Ctrl+Shift+V to start recording`n3. Speak your message`n4. Press Ctrl+Shift+S to send`n`nNo automated clicking - more reliable!
+    MsgBox, 64, Voice Automation, Script is running!`n`nSIMPLE WORKFLOW:`n`n1. Click in Claude's text field`n2. Press Ctrl+Shift+V`n3. Windows Voice Typing opens (Win+H)`n4. Speak your message`n5. Press Ctrl+Shift+S to send`n`nNo WhisperWriter needed - uses Windows built-in!
 return
 
 ; Helper function to remove tooltip
@@ -70,7 +70,7 @@ Menu, Tray, Add, Exit, ExitScript
 Menu, Tray, Default, How to Use
 
 ShowHelp:
-    MsgBox, 64, Voice Automation Help, SIMPLE 3-STEP PROCESS:`n`n1. Click in Claude's text field (manual)`n`n2. Press Ctrl+Shift+V`n   → Triggers voice recording`n`n3. Speak your message`n`n4. Press Ctrl+Shift+S to send`n`nWhy manual click?`nMore reliable than automated clicking!
+    MsgBox, 64, Voice Automation Help, SIMPLE 3-STEP PROCESS:`n`n1. Click in Claude's text field`n`n2. Press Ctrl+Shift+V`n   → Opens Windows Voice Typing`n`n3. Speak your message`n`n4. Press Ctrl+Shift+S to send`n`nUses Windows built-in voice typing (Win+H)`nNo complex setup needed!
 return
 
 StartVoice:
