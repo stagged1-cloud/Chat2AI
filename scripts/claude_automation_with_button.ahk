@@ -9,8 +9,8 @@ CoordMode, Mouse, Screen
 ; Track button state: 0 = ready to record, 1 = recording (ready to send)
 global ButtonState := 0
 
-; Create a round, draggable button
-Gui, +AlwaysOnTop -Caption +ToolWindow +E0x20
+; Create a round, freely moveable button
+Gui, +AlwaysOnTop -Caption +ToolWindow
 Gui, Margin, 0, 0
 Gui, Color, 4169E1  ; Royal Blue
 
@@ -18,51 +18,25 @@ Gui, Color, 4169E1  ; Royal Blue
 Gui, Font, s8 bold, Segoe UI
 Gui, Add, Text, x0 y22 w70 h28 cWhite gToggleVoice Center BackgroundTrans vButtonText, MIC`nCLICK
 
-Gui, Show, w70 h70 NA, Voice Button
+; Show button in default position (bottom-right of screen)
+SysGet, ScreenWidth, 78
+SysGet, ScreenHeight, 79
+ButtonX := ScreenWidth - 100
+ButtonY := ScreenHeight - 150
+Gui, Show, x%ButtonX% y%ButtonY% w70 h70, Voice Button
 
 ; Make the GUI window round (circular)
 WinSet, Region, 0-0 W70 H70 R35-35, Voice Button
 
-; Make button draggable - right-click and drag to move
-OnMessage(0x201, "WM_LBUTTONDOWN")
+; Enable dragging with right-click
+OnMessage(0x204, "WM_RBUTTONDOWN")
 
-; Initially hide the button
-Gui, Hide
-
-; Monitor for Claude window
-SetTimer, CheckClaudeWindow, 500
-return
-
-CheckClaudeWindow:
-    IfWinExist, ahk_exe claude.exe
-    {
-        IfWinActive, ahk_exe claude.exe
-        {
-            ; Get Claude window position
-            WinGetPos, WinX, WinY, WinWidth, WinHeight, A
-            
-            ; Position smaller button (70x70) in bottom-right corner
-            ButtonX := WinX + WinWidth - 90
-            ButtonY := WinY + WinHeight - 180
-            
-            ; Show and position the button
-            Gui, Show, x%ButtonX% y%ButtonY% w70 h70 NA, Voice Button
-        }
-        else
-        {
-            ; Hide button when Claude is not active
-            Gui, Hide
-        }
-    }
-    else
-    {
-        ; Hide button when Claude is not running
-        Gui, Hide
-    }
 return
 
 ; When button is clicked - toggle between recording and sending
 ToggleVoice:
+    global ButtonState
+    
     if (ButtonState = 0)
     {
         ; First click: Start voice recording
@@ -84,14 +58,17 @@ ToggleVoice:
         Send, #{h}
         
         ; Show clean tooltip
-        ToolTip, Recording... Click button again to send
+        ToolTip, Recording... Click button again to SEND
         SetTimer, RemoveToolTip, 3000
     }
-    else
+    else if (ButtonState = 1)
     {
         ; Second click: Send the message
         Gui, Color, 00CC00  ; Bright green (sending)
         GuiControl,, ButtonText, SEND`nING
+        
+        ; Show tooltip
+        ToolTip, Sending message...
         Sleep, 150
         
         ; Send the message
@@ -99,25 +76,23 @@ ToggleVoice:
         Sleep, 100
         Send, {Enter}
         
+        Sleep, 500
+        
         ; Show clean tooltip
         ToolTip, Message sent!
         SetTimer, RemoveToolTip, 1500
         
         ; Reset to ready state
-        Sleep, 250
         Gui, Color, 4169E1  ; Back to blue
         GuiControl,, ButtonText, MIC`nCLICK
         ButtonState := 0
     }
 return
 
-; Make button draggable with Shift+Click
-WM_LBUTTONDOWN(wParam, lParam, msg, hwnd)
+; Make button draggable with right-click
+WM_RBUTTONDOWN()
 {
-    if GetKeyState("Shift")
-    {
-        PostMessage, 0xA1, 2  ; WM_NCLBUTTONDOWN, HTCAPTION
-    }
+    PostMessage, 0xA1, 2,,, Voice Button
 }
 
 ; Hotkey: Ctrl+Shift+V - Start voice input (alternative to button)
