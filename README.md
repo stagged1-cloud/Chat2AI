@@ -32,18 +32,18 @@ Double-click: start_voice_automation.bat
 **One-Button Workflow (Easiest!):**
 
 1. Open Claude Desktop
-2. **Click the 🎤 button** → Button turns **ORANGE** and starts recording
+2. **Click the MIC button** → Button turns **ORANGE** ("REC ON") and starts recording
 3. **Speak** your message
-4. **Click the 🎤 button again** → Button flashes **GREEN** and sends message
+4. **Click the button again** → Button flashes **GREEN** ("SENDING") and sends message
 
 **That's it! Just two clicks total - one to record, one to send!**
 
-**Button Colors:**
-- 🔵 **Blue** = Ready to record
-- 🟠 **Orange** = Recording (speak now!)
-- 🟢 **Green** = Sending your message
+**Button States:**
+- 🔵 **Blue "MIC CLICK"** = Ready to record
+- 🟠 **Orange "REC ON"** = Recording (speak now!)
+- 🟢 **Green "SENDING"** = Sending your message
 
-> The floating microphone button automatically appears when Claude Desktop is active and disappears when you switch to other windows!
+> The button automatically appears when Claude Desktop is active and disappears when you switch to other windows!
 
 ## Files
 
@@ -57,7 +57,7 @@ Double-click: start_voice_automation.bat
 
 ## Hotkeys
 
-**Primary Method: 🎤 Button (Click twice - record, then send)**
+**Primary Method: MIC Button (Click twice - record, then send)**
 
 **Alternative Hotkeys:**
 
