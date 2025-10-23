@@ -29,14 +29,19 @@ Double-click: start_voice_automation.bat
 
 ## Usage
 
-**Ultra-Simple with Floating Button:**
+**One-Button Workflow (Easiest!):**
 
 1. Open Claude Desktop
-2. **Click the floating 🎤 button** (appears in bottom-right when Claude is active)
+2. **Click the 🎤 button** → Button turns **ORANGE** and starts recording
 3. **Speak** your message
-4. Press **Ctrl+Shift+S** → Send message
+4. **Click the 🎤 button again** → Button flashes **GREEN** and sends message
 
-**Alternative:** Press **Ctrl+Shift+V** from anywhere to start voice typing
+**That's it! Just two clicks total - one to record, one to send!**
+
+**Button Colors:**
+- 🔵 **Blue** = Ready to record
+- 🟠 **Orange** = Recording (speak now!)
+- 🟢 **Green** = Sending your message
 
 > The floating microphone button automatically appears when Claude Desktop is active and disappears when you switch to other windows!
 
@@ -52,10 +57,11 @@ Double-click: start_voice_automation.bat
 
 ## Hotkeys
 
-**Floating Button + Simple Hotkeys:**
+**Primary Method: 🎤 Button (Click twice - record, then send)**
 
-- **Click 🎤 button**: Start voice input (button appears when Claude is active)
-- **Ctrl+Shift+V**: Start voice input (works from anywhere)
-- **Ctrl+Shift+S**: Send message
+**Alternative Hotkeys:**
+
+- **Ctrl+Shift+V**: Start voice input manually
+- **Ctrl+Shift+S**: Send message manually
 - **Ctrl+Shift+A**: Launch/Activate Claude Desktop
 - **Ctrl+Shift+T**: Test if script is running

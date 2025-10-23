@@ -1,15 +1,19 @@
 ; Claude Desktop Voice Automation with Floating Button
 ; Shows a floating "🎤" button over Claude that you can click to start voice input
+; Click once to start recording, click again to send the message
 
 #SingleInstance Force
 SetTitleMatchMode, 2
 CoordMode, Mouse, Screen
 
-; Create the floating microphone button
+; Track button state: 0 = ready to record, 1 = recording (ready to send)
+global ButtonState := 0
+
+; Create the floating microphone button with rounded corners
 Gui, +AlwaysOnTop -Caption +ToolWindow
 Gui, Color, 4169E1  ; Royal Blue
-Gui, Font, s20, Segoe UI Emoji
-Gui, Add, Text, cWhite gStartVoice, 🎤
+Gui, Font, s24 bold, Segoe UI Emoji
+Gui, Add, Text, cWhite gToggleVoice Center w60 h60, 🎤
 Gui, Show, NA, Voice Button
 
 ; Initially hide the button
@@ -28,11 +32,11 @@ CheckClaudeWindow:
             WinGetPos, WinX, WinY, WinWidth, WinHeight, A
             
             ; Position button in bottom-right of Claude window
-            ButtonX := WinX + WinWidth - 70
-            ButtonY := WinY + WinHeight - 70
+            ButtonX := WinX + WinWidth - 80
+            ButtonY := WinY + WinHeight - 80
             
             ; Show and position the button
-            Gui, Show, x%ButtonX% y%ButtonY% w50 h50 NA, Voice Button
+            Gui, Show, x%ButtonX% y%ButtonY% w70 h70 NA, Voice Button
         }
         else
         {
@@ -47,23 +51,49 @@ CheckClaudeWindow:
     }
 return
 
-; When button is clicked
-StartVoice:
-    ; Flash the button to show it was clicked
-    Gui, Color, FF4500  ; Orange-red
-    Sleep, 100
-    Gui, Color, 4169E1  ; Back to blue
-    
-    ; Click in the text field area
-    WinActivate, ahk_exe claude.exe
-    WinGetPos, WinX, WinY, WinWidth, WinHeight, A
-    ClickX := WinX + (WinWidth / 2)
-    ClickY := WinY + WinHeight - 100
-    Click, %ClickX%, %ClickY%
-    Sleep, 200
-    
-    ; Start Windows Voice Typing
-    Send, #{h}
+; When button is clicked - toggle between recording and sending
+ToggleVoice:
+    if (ButtonState = 0)
+    {
+        ; First click: Start voice recording
+        Gui, Color, FF4500  ; Orange-red (recording)
+        ButtonState := 1
+        
+        ; Click in the text field area
+        WinActivate, ahk_exe claude.exe
+        WinGetPos, WinX, WinY, WinWidth, WinHeight, A
+        ClickX := WinX + (WinWidth / 2)
+        ClickY := WinY + WinHeight - 100
+        Click, %ClickX%, %ClickY%
+        Sleep, 200
+        
+        ; Start Windows Voice Typing
+        Send, #{h}
+        
+        ; Show tooltip
+        ToolTip, 🎙️ Recording... Click button again to SEND
+        SetTimer, RemoveToolTip, 3000
+    }
+    else
+    {
+        ; Second click: Send the message
+        Gui, Color, 32CD32  ; Lime green (sending)
+        Sleep, 200
+        
+        ; Send the message
+        WinActivate, ahk_exe claude.exe
+        Sleep, 100
+        Send, {Enter}
+        
+        ; Show tooltip
+        ToolTip, ✅ Message sent!
+        SetTimer, RemoveToolTip, 2000
+        
+        ; Reset to ready state
+        Sleep, 300
+        Gui, Color, 4169E1  ; Back to blue
+        ButtonState := 0
+    }
 return
 
 ; Hotkey: Ctrl+Shift+V - Start voice input (alternative to button)
@@ -97,7 +127,7 @@ return
 
 ; Test hotkey
 ^+t::
-    MsgBox, 64, Voice Automation, Script is running!`n`nUSAGE:`n`n1. Click the floating 🎤 button`n   OR press Ctrl+Shift+V`n`n2. Speak your message`n`n3. Press Ctrl+Shift+S to send`n`nThe 🎤 button appears when Claude is active!
+    MsgBox, 64, Voice Automation, Script is running!`n`nUSAGE:`n`n1. Click the 🎤 button once to START recording`n   (Button turns ORANGE)`n`n2. Speak your message`n`n3. Click the 🎤 button again to SEND`n   (Button flashes GREEN)`n`nThe button appears when Claude is active!
 return
 
 ; Helper function to remove tooltip
@@ -116,7 +146,7 @@ Menu, Tray, Add, Exit, ExitScript
 Menu, Tray, Default, How to Use
 
 ShowHelp:
-    MsgBox, 64, Voice Automation Help, FLOATING BUTTON MODE:`n`n1. Open Claude Desktop`n`n2. Click the floating 🎤 button`n   (appears in bottom-right)`n`n3. Speak your message`n`n4. Press Ctrl+Shift+S to send`n`nAlternative: Press Ctrl+Shift+V anywhere
+    MsgBox, 64, Voice Automation Help, ONE-BUTTON WORKFLOW:`n`n1. Open Claude Desktop`n`n2. Click the 🎤 button to START recording`n   → Button turns ORANGE`n`n3. Speak your message`n`n4. Click the 🎤 button again to SEND`n   → Button flashes GREEN`n`nThat's it! Two clicks total.`n`nAlternative hotkeys:`nCtrl+Shift+V - Start voice typing`nCtrl+Shift+S - Send message
 return
 
 ReloadScript:
