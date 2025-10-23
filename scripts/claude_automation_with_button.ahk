@@ -69,21 +69,20 @@ ToggleVoice:
         ; Update button text
         GuiControl,, ButtonText, REC`nON
         
-        ; Activate Claude and get its window position
+        ; Activate Claude
         WinActivate, ahk_exe claude.exe
         Sleep, 150
+        
+        ; SMART APPROACH: Use Ctrl+N to start new chat (focuses input)
+        ; OR use Ctrl+Shift+Space which often focuses input in Electron apps
+        ; OR simply press Escape to clear any popups, then start typing
+        Send, {Escape}
+        Sleep, 100
+        
+        ; Try clicking in bottom 30% of window (more reliable than fixed pixels)
         WinGetPos, WinX, WinY, WinWidth, WinHeight, A
-        
-        ; Click TWICE as far up - 240 pixels from bottom to hit text field
-        ; Clicking in the center horizontally, and in the text field area
         ClickX := WinX + (WinWidth / 2)
-        ClickY := WinY + WinHeight - 240
-        
-        ; Click to focus the text field
-        Click, %ClickX%, %ClickY%
-        Sleep, 150
-        
-        ; Click again to ensure the text field is focused
+        ClickY := WinY + (WinHeight * 0.85)  ; 85% down = bottom area
         Click, %ClickX%, %ClickY%
         Sleep, 200
         
