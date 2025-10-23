@@ -29,14 +29,14 @@ Double-click: start_voice_automation.bat
 
 ## Usage
 
-**2-Step Process (to avoid Nvidia conflicts):**
+**Ultra-Simple 3-Step Process:**
 
-1. Press **Ctrl+Shift+V** → Focuses Claude text field
-2. Press **Ctrl+Shift+Space** → Starts WhisperWriter voice recording
-3. Speak your message
+1. **Click** in Claude's text field (manual click - just once)
+2. Press **Ctrl+Shift+V** → Starts voice recording
+3. **Speak** your message
 4. Press **Ctrl+Shift+S** → Send message
 
-The script no longer auto-triggers WhisperWriter to avoid conflicts with Nvidia GeForce Experience.
+> **Why manual click?** Automated clicking was unreliable due to Claude's Electron-based UI. Manual clicking is faster and more reliable!
 
 ## Files
 
@@ -50,11 +50,9 @@ The script no longer auto-triggers WhisperWriter to avoid conflicts with Nvidia 
 
 ## Hotkeys
 
-**Note:** Changed to Ctrl+Shift combinations to avoid conflicts with Nvidia GeForce Experience
+**Ultra-simple hotkeys:**
 
-- **Ctrl+Shift+V**: Focus Claude text field and activate voice input
-- **Ctrl+Shift+S**: Send message (press Enter)
-- **Ctrl+Shift+C**: Clear text field
+- **Ctrl+Shift+V**: Start voice recording (click text field first)
+- **Ctrl+Shift+S**: Send message
 - **Ctrl+Shift+A**: Launch/Activate Claude Desktop
-- **Ctrl+Shift+Space**: WhisperWriter voice recording (configured in WhisperWriter)
 - **Ctrl+Shift+T**: Test if script is running
