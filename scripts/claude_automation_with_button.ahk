@@ -9,19 +9,19 @@ CoordMode, Mouse, Screen
 ; Track button state: 0 = ready to record, 1 = recording (ready to send)
 global ButtonState := 0
 
-; Create a round, 3D button with shadow effect
+; Create a round, 3D button with shadow effect (30% smaller)
 Gui, +AlwaysOnTop -Caption +ToolWindow +E0x20
 Gui, Margin, 0, 0
 Gui, Color, 4169E1  ; Royal Blue
 
-; Create button text - centered
-Gui, Font, s10 bold, Segoe UI
-Gui, Add, Text, x0 y30 w100 h40 cWhite gToggleVoice Center BackgroundTrans vButtonText, MIC`nCLICK
+; Create button text - centered (smaller button 70x70)
+Gui, Font, s8 bold, Segoe UI
+Gui, Add, Text, x0 y22 w70 h28 cWhite gToggleVoice Center BackgroundTrans vButtonText, MIC`nCLICK
 
-Gui, Show, w100 h100 NA, Voice Button
+Gui, Show, w70 h70 NA, Voice Button
 
 ; Make the GUI window round (circular)
-WinSet, Region, 0-0 W100 H100 R50-50, Voice Button
+WinSet, Region, 0-0 W70 H70 R35-35, Voice Button
 
 ; Initially hide the button
 Gui, Hide
@@ -38,12 +38,12 @@ CheckClaudeWindow:
             ; Get Claude window position
             WinGetPos, WinX, WinY, WinWidth, WinHeight, A
             
-            ; Position button higher up in bottom-right corner
-            ButtonX := WinX + WinWidth - 120
+            ; Position smaller button (70x70) in bottom-right corner
+            ButtonX := WinX + WinWidth - 90
             ButtonY := WinY + WinHeight - 180
             
             ; Show and position the button
-            Gui, Show, x%ButtonX% y%ButtonY% w100 h100 NA, Voice Button
+            Gui, Show, x%ButtonX% y%ButtonY% w70 h70 NA, Voice Button
         }
         else
         {
@@ -74,18 +74,18 @@ ToggleVoice:
         Sleep, 150
         WinGetPos, WinX, WinY, WinWidth, WinHeight, A
         
-        ; Click in the text input field at the bottom of Claude
-        ; The text field is typically around 60-100 pixels from the bottom
+        ; Click TWICE as far up - 240 pixels from bottom to hit text field
+        ; Clicking in the center horizontally, and in the text field area
         ClickX := WinX + (WinWidth / 2)
-        ClickY := WinY + WinHeight - 60
+        ClickY := WinY + WinHeight - 240
         
         ; Click to focus the text field
         Click, %ClickX%, %ClickY%
-        Sleep, 100
+        Sleep, 150
         
         ; Click again to ensure the text field is focused
         Click, %ClickX%, %ClickY%
-        Sleep, 250
+        Sleep, 200
         
         ; Start Windows Voice Typing
         Send, #{h}
