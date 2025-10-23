@@ -38,9 +38,9 @@ CheckClaudeWindow:
             ; Get Claude window position
             WinGetPos, WinX, WinY, WinWidth, WinHeight, A
             
-            ; Position button in bottom-right of Claude window with padding
+            ; Position button higher up in bottom-right corner
             ButtonX := WinX + WinWidth - 120
-            ButtonY := WinY + WinHeight - 120
+            ButtonY := WinY + WinHeight - 180
             
             ; Show and position the button
             Gui, Show, x%ButtonX% y%ButtonY% w100 h100 NA, Voice Button
@@ -69,20 +69,23 @@ ToggleVoice:
         ; Update button text
         GuiControl,, ButtonText, REC`nON
         
-        ; Click in the text field area to focus it
+        ; Activate Claude and get its window position
         WinActivate, ahk_exe claude.exe
-        Sleep, 100
+        Sleep, 150
         WinGetPos, WinX, WinY, WinWidth, WinHeight, A
         
-        ; Click in the text input area
+        ; Click in the text input field at the bottom of Claude
+        ; The text field is typically around 60-100 pixels from the bottom
         ClickX := WinX + (WinWidth / 2)
-        ClickY := WinY + WinHeight - 80
-        Click, %ClickX%, %ClickY%
-        Sleep, 150
+        ClickY := WinY + WinHeight - 60
         
-        ; Click again to ensure focus
+        ; Click to focus the text field
         Click, %ClickX%, %ClickY%
-        Sleep, 200
+        Sleep, 100
+        
+        ; Click again to ensure the text field is focused
+        Click, %ClickX%, %ClickY%
+        Sleep, 250
         
         ; Start Windows Voice Typing
         Send, #{h}
