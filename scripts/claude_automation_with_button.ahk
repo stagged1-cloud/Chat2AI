@@ -75,11 +75,9 @@ ToggleVoice:
         ; Show tooltip
         ToolTip, Sending message...
         
-        ; Activate Claude and send
-        WinActivate, ahk_exe claude.exe
-        Sleep, 200
-        
-        ; Send Enter to submit
+        ; CRITICAL: Send Enter IMMEDIATELY before the popup closes!
+        ; Don't activate Claude first - that would close the quick input popup
+        ; Just send Enter directly to the active window (the popup)
         Send, {Enter}
         
         Sleep, 300
