@@ -33,71 +33,55 @@ OnMessage(0x204, "WM_RBUTTONDOWN")
 
 return
 
-; When button is clicked - toggle between recording and sending
+; When button is clicked - START recording only
 ToggleVoice:
     global ButtonState
     
-    if (ButtonState == 0)
-    {
-        ; First click: Start voice recording
-        ButtonState := 1
-        Gui, Color, FF6600  ; Bright orange (recording)
-        
-        ; Update button text
-        GuiControl,, ButtonText, REC`nON
-        
-        ; Activate Claude
-        WinActivate, ahk_exe claude.exe
-        Sleep, 150
-        
-        ; Use Claude's built-in hotkey to focus text field!
-        Send, ^!{Space}
-        Sleep, 250
-        
-        ; Start Windows Voice Typing
-        Send, #{h}
-        
-        ; Show clean tooltip
-        ToolTip, Recording... Click button again to SEND
-        SetTimer, RemoveToolTip, 3000
-        
-        return
-    }
+    ; Button only starts recording - you press Enter manually or use Ctrl+Shift+Enter
+    ButtonState := 1
+    Gui, Color, FF6600  ; Bright orange (recording)
     
-    if (ButtonState == 1)
-    {
-        ; Second click: Send the message
-        ; Use ControlSend to send Enter directly to Claude without stealing focus
-        
-        ; Get the active window (should be the popup)
-        WinGet, ActiveID, ID, A
-        
-        ; Send Enter using ControlSend to avoid focus issues
-        ControlSend, , {Enter}, ahk_id %ActiveID%
-        
-        ; If that doesn't work, try direct Send as backup
-        Send, {Enter}
-        
-        ; Delay GUI updates to prevent focus steal
-        SetTimer, UpdateButtonAfterSend, 100
-        ButtonState := 2
-        
-        return
-    }
+    ; Update button text
+    GuiControl,, ButtonText, REC`nON
+    
+    ; Activate Claude
+    WinActivate, ahk_exe claude.exe
+    Sleep, 150
+    
+    ; Use Claude's built-in hotkey to focus text field!
+    Send, ^!{Space}
+    Sleep, 250
+    
+    ; Start Windows Voice Typing
+    Send, #{h}
+    
+    ; Show clean tooltip with instructions
+    ToolTip, Recording... Press ENTER to send (or Ctrl+Shift+Enter)
+    SetTimer, RemoveToolTip, 4000
+    
+    ; Auto-reset button after 30 seconds
+    SetTimer, ResetButton, 30000
 return
 
-UpdateButtonAfterSend:
-    SetTimer, UpdateButtonAfterSend, Off
+; Hotkey to send message - Ctrl+Shift+Enter
+^+Enter::
+    global ButtonState
     
-    ; Update button appearance after Enter is sent
-    Gui, Color, 00CC00  ; Bright green
-    GuiControl,, ButtonText, SEND`nING
+    ; Send Enter to active window
+    Send, {Enter}
     
-    ToolTip, Message sent!
-    SetTimer, RemoveToolTip, 1500
-    
-    ; Reset after a moment
-    SetTimer, ResetButton, 500
+    ; Update button to show it sent
+    if (ButtonState == 1)
+    {
+        Gui, Color, 00CC00  ; Green
+        GuiControl,, ButtonText, SENT!
+        
+        ToolTip, Message sent!
+        SetTimer, RemoveToolTip, 1500
+        
+        ; Reset button after a moment
+        SetTimer, ResetButton, 1000
+    }
 return
 
 ResetButton:
