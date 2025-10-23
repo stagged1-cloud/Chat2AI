@@ -67,27 +67,23 @@ ToggleVoice:
     if (ButtonState == 1)
     {
         ; Second click: Send the message
-        ButtonState := 2  ; Temporary state to prevent double-clicking
+        ; CRITICAL: Send Enter FIRST before changing button state/color!
+        ; The button GUI manipulation causes focus loss which closes the popup
         
+        ; Send Enter IMMEDIATELY with no delays
+        Send, {Enter}
+        
+        ; NOW update the button (after Enter is sent)
+        ButtonState := 2
         Gui, Color, 00CC00  ; Bright green (sending)
         GuiControl,, ButtonText, SEND`nING
         
         ; Show tooltip
-        ToolTip, Sending message...
-        
-        ; CRITICAL: Send Enter IMMEDIATELY before the popup closes!
-        ; Don't activate Claude first - that would close the quick input popup
-        ; Just send Enter directly to the active window (the popup)
-        Send, {Enter}
-        
-        Sleep, 300
-        
-        ; Show success tooltip
         ToolTip, Message sent!
         SetTimer, RemoveToolTip, 1500
         
-        ; Reset to ready state after a moment
-        Sleep, 400
+        ; Reset to ready state
+        Sleep, 500
         Gui, Color, 4169E1  ; Back to blue
         GuiControl,, ButtonText, MIC`nCLICK
         ButtonState := 0
