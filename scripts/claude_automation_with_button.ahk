@@ -9,12 +9,12 @@ CoordMode, Mouse, Screen
 ; Track button state: 0 = ready to record, 1 = recording (ready to send)
 global ButtonState := 0
 
-; Create a round, 3D button with shadow effect (30% smaller)
+; Create a round, draggable button
 Gui, +AlwaysOnTop -Caption +ToolWindow +E0x20
 Gui, Margin, 0, 0
 Gui, Color, 4169E1  ; Royal Blue
 
-; Create button text - centered (smaller button 70x70)
+; Create button text - centered (70x70 button)
 Gui, Font, s8 bold, Segoe UI
 Gui, Add, Text, x0 y22 w70 h28 cWhite gToggleVoice Center BackgroundTrans vButtonText, MIC`nCLICK
 
@@ -22,6 +22,9 @@ Gui, Show, w70 h70 NA, Voice Button
 
 ; Make the GUI window round (circular)
 WinSet, Region, 0-0 W70 H70 R35-35, Voice Button
+
+; Make button draggable - right-click and drag to move
+OnMessage(0x201, "WM_LBUTTONDOWN")
 
 ; Initially hide the button
 Gui, Hide
@@ -71,19 +74,10 @@ ToggleVoice:
         
         ; Activate Claude
         WinActivate, ahk_exe claude.exe
-        Sleep, 150
-        
-        ; SMART APPROACH: Use Ctrl+N to start new chat (focuses input)
-        ; OR use Ctrl+Shift+Space which often focuses input in Electron apps
-        ; OR simply press Escape to clear any popups, then start typing
-        Send, {Escape}
         Sleep, 100
         
-        ; Try clicking in bottom 30% of window (more reliable than fixed pixels)
-        WinGetPos, WinX, WinY, WinWidth, WinHeight, A
-        ClickX := WinX + (WinWidth / 2)
-        ClickY := WinY + (WinHeight * 0.85)  ; 85% down = bottom area
-        Click, %ClickX%, %ClickY%
+        ; Use Claude's built-in hotkey to focus text field!
+        Send, ^!{Space}
         Sleep, 200
         
         ; Start Windows Voice Typing
@@ -117,12 +111,23 @@ ToggleVoice:
     }
 return
 
+; Make button draggable with Shift+Click
+WM_LBUTTONDOWN(wParam, lParam, msg, hwnd)
+{
+    if GetKeyState("Shift")
+    {
+        PostMessage, 0xA1, 2  ; WM_NCLBUTTONDOWN, HTCAPTION
+    }
+}
+
 ; Hotkey: Ctrl+Shift+V - Start voice input (alternative to button)
 ^+v::
     IfWinExist, ahk_exe claude.exe
     {
         WinActivate
         Sleep, 100
+        Send, ^!{Space}  ; Focus text field using Claude's hotkey
+        Sleep, 200
     }
     Send, #{h}
 return
@@ -148,7 +153,7 @@ return
 
 ; Test hotkey
 ^+t::
-    MsgBox, 64, Voice Automation, Script is running!`n`nUSAGE:`n`n1. Click the MIC button once to START recording`n   (Button turns ORANGE: "REC ON")`n`n2. Speak your message`n`n3. Click the button again to SEND`n   (Button flashes GREEN: "SENDING")`n`nThe button appears when Claude is active!
+    MsgBox, 64, Voice Automation, Script is running!`n`nUSAGE:`n`n1. Click MIC button = START recording (ORANGE)`n2. Speak your message`n3. Click button again = SEND (GREEN)`n`nFEATURES:`n• Uses Ctrl+Alt+Space to focus text field`n• Shift+Click button to MOVE it`n• Works with any Claude window size!`n`nHotkeys:`nCtrl+Shift+V - Start voice`nCtrl+Shift+S - Send
 return
 
 ; Helper function to remove tooltip
@@ -167,7 +172,7 @@ Menu, Tray, Add, Exit, ExitScript
 Menu, Tray, Default, How to Use
 
 ShowHelp:
-    MsgBox, 64, Voice Automation Help, ONE-BUTTON WORKFLOW:`n`n1. Open Claude Desktop`n`n2. Click the MIC button to START recording`n   → Button turns ORANGE: "REC ON"`n`n3. Speak your message`n`n4. Click the button again to SEND`n   → Button flashes GREEN: "SENDING"`n`nThat's it! Two clicks total.`n`nAlternative hotkeys:`nCtrl+Shift+V - Start voice typing`nCtrl+Shift+S - Send message
+    MsgBox, 64, Voice Automation Help, ONE-BUTTON WORKFLOW:`n`n1. Click MIC button → ORANGE "REC ON"`n2. Speak your message`n3. Click button again → GREEN "SENDING"`n`nFEATURES:`n• Uses Ctrl+Alt+Space (Claude's hotkey!)`n• Works with ANY window size`n• Shift+Click to MOVE button`n`nHotkeys:`nCtrl+Shift+V - Start voice`nCtrl+Shift+S - Send message`nCtrl+Shift+T - Test script
 return
 
 ReloadScript:
