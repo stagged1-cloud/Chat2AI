@@ -67,29 +67,46 @@ ToggleVoice:
     if (ButtonState == 1)
     {
         ; Second click: Send the message
-        ; CRITICAL: Send Enter FIRST before changing button state/color!
-        ; The button GUI manipulation causes focus loss which closes the popup
+        ; Use ControlSend to send Enter directly to Claude without stealing focus
         
-        ; Send Enter IMMEDIATELY with no delays
+        ; Get the active window (should be the popup)
+        WinGet, ActiveID, ID, A
+        
+        ; Send Enter using ControlSend to avoid focus issues
+        ControlSend, , {Enter}, ahk_id %ActiveID%
+        
+        ; If that doesn't work, try direct Send as backup
         Send, {Enter}
         
-        ; NOW update the button (after Enter is sent)
+        ; Delay GUI updates to prevent focus steal
+        SetTimer, UpdateButtonAfterSend, 100
         ButtonState := 2
-        Gui, Color, 00CC00  ; Bright green (sending)
-        GuiControl,, ButtonText, SEND`nING
-        
-        ; Show tooltip
-        ToolTip, Message sent!
-        SetTimer, RemoveToolTip, 1500
-        
-        ; Reset to ready state
-        Sleep, 500
-        Gui, Color, 4169E1  ; Back to blue
-        GuiControl,, ButtonText, MIC`nCLICK
-        ButtonState := 0
         
         return
     }
+return
+
+UpdateButtonAfterSend:
+    SetTimer, UpdateButtonAfterSend, Off
+    
+    ; Update button appearance after Enter is sent
+    Gui, Color, 00CC00  ; Bright green
+    GuiControl,, ButtonText, SEND`nING
+    
+    ToolTip, Message sent!
+    SetTimer, RemoveToolTip, 1500
+    
+    ; Reset after a moment
+    SetTimer, ResetButton, 500
+return
+
+ResetButton:
+    SetTimer, ResetButton, Off
+    global ButtonState
+    
+    Gui, Color, 4169E1  ; Back to blue
+    GuiControl,, ButtonText, MIC`nCLICK
+    ButtonState := 0
 return
 
 ; Make button draggable with right-click
