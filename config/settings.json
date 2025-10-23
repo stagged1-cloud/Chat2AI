@@ -1,0 +1,10 @@
+{
+  "whisper_model": "base",
+  "hotkey": "ctrl+shift+space",
+  "auto_punctuation": true,
+  "language": "en",
+  "api_key": null,
+  "use_local_model": true,
+  "recording_mode": "push_to_talk",
+  "output_format": "auto_type"
+}
