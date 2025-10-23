@@ -1,67 +1,68 @@
-# Voice Automation Project
+# Voice Automation for Claude Desktop
 
-This project implements Approach 3 from the voice automation guide: Advanced automation with AutoHotkey and WhisperWriter for automating voice input into Claude Desktop.
+Simple voice automation using AutoHotkey and Windows Voice Typing for hands-free interaction with Claude Desktop.
 
 ## Components
 
-- **AutoHotkey Script**: Detects Claude Desktop windows and focuses text fields
-- **WhisperWriter**: High-accuracy voice-to-text transcription
-- **Configuration**: Customizable settings for hotkeys and behavior
+- **AutoHotkey Script**: Floating button that triggers Claude's text field focus and Windows Voice Typing
+- **Windows Voice Typing**: Built-in Windows 11 speech recognition (Win+H)
+- **Configuration**: Customizable hotkeys and settings
 
 ## Setup
 
-✅ **Prerequisites Installed:**
-- AutoHotkey ✓
-- Python 3.13 ✓
-- OpenAI Whisper ✓
-- WhisperWriter ✓ (located at `c:\Users\don_t\Desktop\Projects\chat to AI\whisper-writer`)
+✅ **Prerequisites:**
+- Windows 11 (for Voice Typing feature)
+- AutoHotkey v2 installed
+- Claude Desktop installed
 
 ## Quick Start
 
-**Option 1: Use the batch file (Recommended)**
-```
-Double-click: start_voice_automation.bat
-```
+**Double-click:** `start_voice_automation.bat`
 
-**Option 2: Manual start**
-1. Run WhisperWriter: `cd whisper-writer && python run.py`
-2. Run AutoHotkey script: Open `scripts\claude_automation.ahk`
+This launches the AutoHotkey script with a floating button.
 
 ## Usage
 
-**One-Button Workflow (Easiest!):**
+**Simple Workflow:**
 
 1. Open Claude Desktop
-2. **Click the MIC button** → Button turns **ORANGE** ("REC ON") and starts recording
+2. **Click the MIC button** → Button turns **ORANGE** and Windows Voice Typing opens
 3. **Speak** your message
-4. **Click the button again** → Button flashes **GREEN** ("SENDING") and sends message
-
-**That's it! Just two clicks total - one to record, one to send!**
+4. **Press ENTER** (or Ctrl+Shift+Enter) to send
 
 **Button States:**
-- 🔵 **Blue "MIC CLICK"** = Ready to record
-- 🟠 **Orange "REC ON"** = Recording (speak now!)
-- 🟢 **Green "SENDING"** = Sending your message
+- 🔵 **Blue "MIC CLICK"** = Ready to start recording
+- 🟠 **Orange "REC ON"** = Recording active (speak now!)
 
-> The button automatically appears when Claude Desktop is active and disappears when you switch to other windows!
+**Features:**
+- Uses Claude's native `Ctrl+Alt+Space` hotkey to focus text field reliably
+- Right-click drag to move button anywhere on screen
+- Auto-resets after 30 seconds
+- Works with any Claude window size
+
 
 ## Files
 
-- `start_voice_automation.bat`: **Quick start script - Run this!**
-- `scripts/claude_automation.ahk`: Main AutoHotkey automation script
-- `scripts/install_whisperwriter.py`: Installation script for WhisperWriter
+- `start_voice_automation.bat`: Quick start script - Run this!
+- `scripts/claude_automation_with_button.ahk`: Main script with floating button
+- `scripts/window_spy.ahk`: Debugging utility to inspect UI elements
 - `config/settings.json`: Configuration settings
 - `config/hotkeys.ini`: Hotkey mappings
-- `docs/setup_guide.md`: Detailed setup instructions
-- `docs/troubleshooting.md`: Common issues and solutions
 
 ## Hotkeys
 
-**Primary Method: MIC Button (Click twice - record, then send)**
+**Primary Method: Click MIC button, then press Enter to send**
 
 **Alternative Hotkeys:**
 
-- **Ctrl+Shift+V**: Start voice input manually
-- **Ctrl+Shift+S**: Send message manually
+- **Ctrl+Shift+V**: Start voice input manually (without button)
+- **Ctrl+Shift+Enter**: Send message from anywhere
 - **Ctrl+Shift+A**: Launch/Activate Claude Desktop
 - **Ctrl+Shift+T**: Test if script is running
+
+## How It Works
+
+1. Button click sends `Ctrl+Alt+Space` (Claude's native text field focus hotkey)
+2. Then automatically opens Windows Voice Typing (`Win+H`)
+3. You speak your message
+4. Press Enter to send (button GUI would steal focus if clicked again, so we use keyboard)

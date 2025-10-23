@@ -1,15 +1,15 @@
 ; Claude Desktop Voice Automation with Floating Button
-; Shows a floating "🎤" button over Claude that you can click to start voice input
-; Click once to start recording, click again to send the message
+; Click button to start voice input, press Enter to send
+; Right-click drag to move button
 
 #SingleInstance Force
 SetTitleMatchMode, 2
 CoordMode, Mouse, Screen
 
-; Track button state: 0 = ready to record, 1 = recording (ready to send)
+; Track button state: 0 = ready, 1 = recording
 global ButtonState := 0
 
-; Create a round, freely moveable button
+; Create a round, moveable button
 Gui, +AlwaysOnTop -Caption +ToolWindow
 Gui, Margin, 0, 0
 Gui, Color, 4169E1  ; Royal Blue
@@ -37,51 +37,36 @@ return
 ToggleVoice:
     global ButtonState
     
-    ; Button only starts recording - you press Enter manually or use Ctrl+Shift+Enter
+    ; Button only starts recording - you press Enter manually to send
     ButtonState := 1
-    Gui, Color, FF6600  ; Bright orange (recording)
-    
-    ; Update button text
+    Gui, Color, FF6600  ; Orange (recording)
     GuiControl,, ButtonText, REC`nON
     
     ; Activate Claude
     WinActivate, ahk_exe claude.exe
     Sleep, 150
     
-    ; Use Claude's built-in hotkey to focus text field!
+    ; Use Claude's built-in hotkey to focus text field
     Send, ^!{Space}
     Sleep, 250
     
     ; Start Windows Voice Typing
     Send, #{h}
     
-    ; Show clean tooltip with instructions
-    ToolTip, Recording... Press ENTER to send (or Ctrl+Shift+Enter)
+    ; Show tooltip with instructions
+    ToolTip, Recording... Press ENTER to send
     SetTimer, RemoveToolTip, 4000
     
     ; Auto-reset button after 30 seconds
     SetTimer, ResetButton, 30000
 return
 
+
 ; Hotkey to send message - Ctrl+Shift+Enter
 ^+Enter::
-    global ButtonState
-    
-    ; Send Enter to active window
     Send, {Enter}
-    
-    ; Update button to show it sent
-    if (ButtonState == 1)
-    {
-        Gui, Color, 00CC00  ; Green
-        GuiControl,, ButtonText, SENT!
-        
-        ToolTip, Message sent!
-        SetTimer, RemoveToolTip, 1500
-        
-        ; Reset button after a moment
-        SetTimer, ResetButton, 1000
-    }
+    ToolTip, Message sent!
+    SetTimer, RemoveToolTip, 1500
 return
 
 ResetButton:
@@ -111,13 +96,6 @@ WM_RBUTTONDOWN()
     Send, #{h}
 return
 
-; Hotkey: Ctrl+Shift+S - Send message
-#IfWinActive ahk_exe claude.exe
-^+s::
-    Send, {Enter}
-return
-#IfWinActive
-
 ; Hotkey: Ctrl+Shift+A - Launch Claude
 ^+a::
     IfWinExist, ahk_exe claude.exe
@@ -132,8 +110,9 @@ return
 
 ; Test hotkey
 ^+t::
-    MsgBox, 64, Voice Automation, Script is running!`n`nUSAGE:`n`n1. Click MIC button = START recording (ORANGE)`n2. Speak your message`n3. Click button again = SEND (GREEN)`n`nFEATURES:`n• Uses Ctrl+Alt+Space to focus text field`n• Shift+Click button to MOVE it`n• Works with any Claude window size!`n`nHotkeys:`nCtrl+Shift+V - Start voice`nCtrl+Shift+S - Send
+    MsgBox, 64, Voice Automation, Script is running!`n`nUSAGE:`n`n1. Click MIC button = START recording (ORANGE)`n2. Speak your message`n3. Press ENTER to send`n`nFEATURES:`n• Uses Ctrl+Alt+Space (Claude's native hotkey)`n• Right-click drag to MOVE button`n• Works with any window size!`n`nHotkeys:`nCtrl+Shift+V - Start voice`nCtrl+Shift+Enter - Send message
 return
+
 
 ; Helper function to remove tooltip
 RemoveToolTip:
@@ -142,7 +121,7 @@ RemoveToolTip:
 return
 
 ; Tray menu
-Menu, Tray, Tip, Claude Voice Automation with Floating Button
+Menu, Tray, Tip, Claude Voice Automation
 Menu, Tray, NoStandard
 Menu, Tray, Add, How to Use, ShowHelp
 Menu, Tray, Add
@@ -151,7 +130,7 @@ Menu, Tray, Add, Exit, ExitScript
 Menu, Tray, Default, How to Use
 
 ShowHelp:
-    MsgBox, 64, Voice Automation Help, ONE-BUTTON WORKFLOW:`n`n1. Click MIC button → ORANGE "REC ON"`n2. Speak your message`n3. Click button again → GREEN "SENDING"`n`nFEATURES:`n• Uses Ctrl+Alt+Space (Claude's hotkey!)`n• Works with ANY window size`n• Shift+Click to MOVE button`n`nHotkeys:`nCtrl+Shift+V - Start voice`nCtrl+Shift+S - Send message`nCtrl+Shift+T - Test script
+    MsgBox, 64, Voice Automation Help, SIMPLE WORKFLOW:`n`n1. Click MIC button → ORANGE "REC ON"`n2. Speak your message`n3. Press ENTER to send`n`nFEATURES:`n• Uses Ctrl+Alt+Space (Claude's native hotkey)`n• Right-click drag to MOVE button`n• Works with any window size`n`nHotkeys:`nCtrl+Shift+V - Start voice`nCtrl+Shift+Enter - Send message`nCtrl+Shift+T - Test script
 return
 
 ReloadScript:

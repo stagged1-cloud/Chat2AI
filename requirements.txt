@@ -1,9 +1,8 @@
-# Python dependencies for WhisperWriter and voice automation
-openai-whisper>=20231117
-torch>=2.0.0
-numpy>=1.21.0
-sounddevice>=0.4.4
-pyaudio>=0.2.11
-keyboard>=0.13.5
-pyperclip>=1.8.2
-requests>=2.28.0
+# Voice Automation for Claude Desktop
+# 
+# This project uses:
+# - AutoHotkey v2 (must be installed separately from https://www.autohotkey.com/)
+# - Windows 11 Voice Typing (built-in, no installation needed)
+# - Claude Desktop (must be installed separately)
+#
+# No Python dependencies required for the current implementation.
