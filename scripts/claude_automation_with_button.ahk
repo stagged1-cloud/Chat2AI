@@ -37,22 +37,22 @@ return
 ToggleVoice:
     global ButtonState
     
-    if (ButtonState = 0)
+    if (ButtonState == 0)
     {
         ; First click: Start voice recording
-        Gui, Color, FF6600  ; Bright orange (recording)
         ButtonState := 1
+        Gui, Color, FF6600  ; Bright orange (recording)
         
         ; Update button text
         GuiControl,, ButtonText, REC`nON
         
         ; Activate Claude
         WinActivate, ahk_exe claude.exe
-        Sleep, 100
+        Sleep, 150
         
         ; Use Claude's built-in hotkey to focus text field!
         Send, ^!{Space}
-        Sleep, 200
+        Sleep, 250
         
         ; Start Windows Voice Typing
         Send, #{h}
@@ -60,32 +60,41 @@ ToggleVoice:
         ; Show clean tooltip
         ToolTip, Recording... Click button again to SEND
         SetTimer, RemoveToolTip, 3000
+        
+        return
     }
-    else if (ButtonState = 1)
+    
+    if (ButtonState == 1)
     {
         ; Second click: Send the message
+        ButtonState := 2  ; Temporary state to prevent double-clicking
+        
         Gui, Color, 00CC00  ; Bright green (sending)
         GuiControl,, ButtonText, SEND`nING
         
         ; Show tooltip
         ToolTip, Sending message...
-        Sleep, 150
         
-        ; Send the message
+        ; Activate Claude and send
         WinActivate, ahk_exe claude.exe
-        Sleep, 100
+        Sleep, 200
+        
+        ; Send Enter to submit
         Send, {Enter}
         
-        Sleep, 500
+        Sleep, 300
         
-        ; Show clean tooltip
+        ; Show success tooltip
         ToolTip, Message sent!
         SetTimer, RemoveToolTip, 1500
         
-        ; Reset to ready state
+        ; Reset to ready state after a moment
+        Sleep, 400
         Gui, Color, 4169E1  ; Back to blue
         GuiControl,, ButtonText, MIC`nCLICK
         ButtonState := 0
+        
+        return
     }
 return
 
