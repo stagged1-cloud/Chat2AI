@@ -16,7 +16,10 @@ Gui, Color, 4169E1  ; Royal Blue
 
 ; Create button text - centered (70x70 button)
 Gui, Font, s8 bold, Segoe UI
-Gui, Add, Text, x0 y22 w70 h28 cWhite gToggleVoice Center BackgroundTrans vButtonText, MIC`nCLICK
+Gui, Add, Text, x0 y22 w70 h28 cWhite Center BackgroundTrans vButtonText, MIC`nCLICK
+
+; Add invisible overlay for click detection
+Gui, Add, Text, x0 y0 w70 h70 gToggleVoice BackgroundTrans
 
 ; Show button in default position (bottom-right of screen)
 SysGet, ScreenWidth, 78
@@ -54,8 +57,8 @@ ToggleVoice:
     Send, #{h}
     
     ; Show tooltip with instructions
-    ToolTip, Recording... Press ENTER to send
-    SetTimer, RemoveToolTip, 4000
+    ToolTip, Recording... Speak then click INSERT in popup (or close it), then press ENTER
+    SetTimer, RemoveToolTip, 6000
     
     ; Auto-reset button after 30 seconds
     SetTimer, ResetButton, 30000
